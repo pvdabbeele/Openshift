@@ -1,0 +1,53 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: deployment-pvdabbeele
+  namespace: my-namespace
+  labels:
+    app: app-pvdabbeele
+    app.kubernetes.io/component: app-pvdabbeele
+    app.kubernetes.io/instance: app-pvdabbeele
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: deployment-pvdabbeele
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        deployment: deployment-pvdabbeele
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+    spec:
+      volumes:
+        - name: data-pvdabbeele
+          persistentVolumeClaim:
+            claimName: pvc-pvdabbeele
+      containers:
+        - name: pvda-limesurveyd
+          image: >- my-image-location.example
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8443
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - name: data-pvdabbeele
+              mountPath: /opt/app-root/mountpoint
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
