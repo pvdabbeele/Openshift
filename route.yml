@@ -1,0 +1,20 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: route-pvdabbeele
+  namespace: my-namespace
+  labels:
+    app: app-pvdabbeele
+    app.kubernetes.io/component: app-pvdabbeele
+    app.kubernetes.io/instance: app-pvdabbeele
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  host: pvdabbeele.example
+  to:
+    kind: Service
+    name: service-pvdabbeele
+    weight: 100
+  port:
+    targetPort: 80-tcp
+  wildcardPolicy: None
