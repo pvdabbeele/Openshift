@@ -1,0 +1,21 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: pv-pvdabbeele
+spec:
+  capacity:
+    storage: 1Gi
+  nfs:
+    server: my-nfs-server.example
+    path: /nfs-mountpoint
+  accessModes:
+    - ReadWriteMany
+  claimRef:
+    kind: PersistentVolumeClaim
+    namespace: my-namespace
+    name: pvc-pvdabbeele
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: slow
+  volumeMode: Filesystem
+status:
+  phase: Bound
