@@ -1,0 +1,32 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: service-pvdabbeele
+  namespace: my-namespace
+  labels:
+    app: app-pvdabbeele
+    app.kubernetes.io/component: app-pvdabbeele
+    app.kubernetes.io/instance: app-pvdabbeele
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+spec:
+  clusterIP: 192.168.1.1
+  ipFamilies:
+    - IPv4
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+    - name: 8443-tcp
+      protocol: TCP
+      port: 8443
+      targetPort: 8443
+  internalTrafficPolicy: Cluster
+  clusterIPs:
+    - 192.168.1.1
+  type: ClusterIP
+  ipFamilyPolicy: SingleStack
+  sessionAffinity: None
+  selector:
+    deployment: deployment-pvdabbeele
